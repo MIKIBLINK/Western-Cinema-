@@ -3,278 +3,246 @@
 
 @section('content')
 <style>
-    .success-animation {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    
-    .success-icon {
-        font-size: 5rem;
-        animation: scaleIn 0.5s ease-out;
-        display: inline-block;
-    }
-    
-    @keyframes scaleIn {
-        0% {
-            transform: scale(0);
-            opacity: 0;
-        }
-        50% {
-            transform: scale(1.2);
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-    
-    .confirmation-header {
-        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        color: white;
-        padding: 2.5rem;
-        border-radius: 15px;
-        margin-bottom: 2rem;
-        box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
-        text-align: center;
-    }
-    
-    .confirmation-header h4 {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-    }
-    
-    .confirmation-subtitle {
-        margin-top: 0.5rem;
-        font-size: 1.1rem;
-        opacity: 0.95;
-    }
-    
-    .ticket-container {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
-        border: 2px dashed #e2e8f0;
-        position: relative;
-    }
-    
-    .ticket-container::before,
-    .ticket-container::after {
-        content: '';
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        background: #f7fafc;
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 1;
-    }
-    
-    .ticket-container::before {
-        left: -15px;
-    }
-    
-    .ticket-container::after {
-        right: -15px;
-    }
-    
-    .ticket-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 1.5rem;
-        text-align: center;
-    }
-    
-    .ticket-header h5 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin: 0;
-    }
-    
-    .ticket-body {
-        padding: 2rem;
-    }
-    
-    .detail-row {
-        display: flex;
-        align-items: flex-start;
-        padding: 1.25rem;
-        border-bottom: 1px solid #e2e8f0;
-        transition: background 0.3s ease;
-    }
-    
-    .detail-row:last-child {
-        border-bottom: none;
-    }
-    
-    .detail-row:hover {
-        background: #f7fafc;
-    }
-    
-    .detail-icon {
-        font-size: 1.75rem;
-        margin-right: 1rem;
-        min-width: 40px;
-        text-align: center;
-    }
-    
-    .detail-content {
-        flex: 1;
-    }
-    
-    .detail-label {
-        font-weight: 700;
-        color: #667eea;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.25rem;
-    }
-    
-    .detail-value {
-        font-size: 1.1rem;
-        color: #2d3748;
-        font-weight: 600;
-    }
-    
-    .seats-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-    }
-    
-    .seat-badge {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    
-    .total-section {
-        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        color: white;
-        padding: 1.5rem 2rem;
-        margin: -2rem -2rem 0 -2rem;
-        text-align: center;
-    }
-    
-    .total-label {
-        font-size: 1rem;
-        opacity: 0.95;
-        margin-bottom: 0.25rem;
-    }
-    
-    .total-amount {
-        font-size: 2.5rem;
-        font-weight: 700;
-    }
-    
-    .action-buttons {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .btn-primary-custom {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 10px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-    }
-    
-    .btn-primary-custom:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        color: white;
-    }
-    
-    .btn-secondary-custom {
-        background: white;
-        border: 2px solid #667eea;
-        color: #667eea;
-        padding: 1rem 2rem;
-        border-radius: 10px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-    }
-    
-    .btn-secondary-custom:hover {
-        background: #667eea;
-        color: white;
-        transform: translateY(-2px);
-    }
-    
-    .info-note {
-        background: #ebf8ff;
-        border-left: 4px solid #4299e1;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        margin-top: 2rem;
-        color: #2c5282;
-    }
-    
-    .info-note strong {
-        color: #2c5282;
-    }
-    
-    @media (max-width: 768px) {
-        .confirmation-header h4 {
-            font-size: 1.5rem;
-        }
-        
-        .success-icon {
-            font-size: 4rem;
-        }
-        
-        .ticket-body {
-            padding: 1.5rem;
-        }
-        
-        .detail-row {
-            padding: 1rem;
-            flex-direction: column;
-        }
-        
-        .detail-icon {
-            margin-bottom: 0.5rem;
-        }
-        
-        .total-amount {
-            font-size: 2rem;
-        }
-        
-        .action-buttons {
-            flex-direction: column;
-        }
-        
-        .btn-primary-custom,
-        .btn-secondary-custom {
-            width: 100%;
-            text-align: center;
-        }
-    }
+/* Page container */
+.page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Success Animation */
+.success-animation {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.success-icon {
+    font-size: 5rem;
+    color: #ef4444; /* red success */
+    animation: popIn 0.6s ease-out;
+    display: inline-block;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Header */
+.confirmation-header {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(220,38,38,0.35);
+}
+
+.confirmation-header h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.confirmation-subtitle {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Ticket Card */
+.ticket-container {
+    display: flex;
+    max-width: 700px;
+    margin: 0 auto 0rem;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+    background: rgb(255, 255, 255);
+
+}
+
+/* Ticket Main & Stub */
+.ticket-main {
+    flex: 3;
+    padding: 2rem;
+    position: relative;
+}
+
+.ticket-stub {
+    flex: 1;
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 30px), 100% calc(100% - 30px));
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Perforated edges */
+.ticket-main::before,
+.ticket-main::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.ticket-main::before { left: -10px; }
+.ticket-main::after { right: -10px; }
+
+/* Ticket Header */
+.ticket-header {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.ticket-header h5 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Detail Rows */
+.detail-row {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.3s ease;
+}
+
+.detail-row:last-child { border-bottom: none; }
+.detail-row:hover { background: #fef2f2; }
+
+.detail-icon {
+    font-size: 1.75rem;
+    margin-right: 1rem;
+    min-width: 40px;
+    text-align: center;
+    color: #dc2626;
+}
+
+.detail-content { flex: 1; }
+
+.detail-label {
+    font-weight: 700;
+    color: #dc2626;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.detail-value {
+    font-size: 1.1rem;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+/* Seats */
+.seats-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.seat-badge {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: white;
+    padding: 0.5rem 0.9rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Total Section */
+.total-section {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-primary-custom {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220,38,38,0.4);
+}
+
+.btn-secondary-custom {
+    background: white;
+    border: 2px solid #dc2626;
+    color: #dc2626;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary-custom:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .ticket-container { flex-direction: column; }
+    .ticket-stub { clip-path: none; width: 100%; padding: 1.5rem; }
+    .detail-row { flex-direction: column; align-items: flex-start; padding: 0.75rem 0.5rem; }
+    .seats-list { justify-content: flex-start; }
+}
 </style>
+
+
+
+
 
 <div class="success-animation">
     <div class="success-icon">🎉</div>
@@ -292,7 +260,7 @@
     <div class="ticket-header">
         <h5>🎟️ Your Cinema Ticket</h5>
     </div>
-    
+
     <div class="ticket-body">
         <div class="detail-row">
             <div class="detail-icon">🎬</div>
@@ -301,7 +269,7 @@
                 <div class="detail-value">{{ $booking->showtime->movie->title }}</div>
             </div>
         </div>
-        
+
         <div class="detail-row">
             <div class="detail-icon">🎭</div>
             <div class="detail-content">
@@ -309,7 +277,7 @@
                 <div class="detail-value">Hall {{ $booking->showtime->hall->name }}</div>
             </div>
         </div>
-        
+
         <div class="detail-row">
             <div class="detail-icon">📅</div>
             <div class="detail-content">
@@ -317,12 +285,12 @@
                 <div class="detail-value">
                     {{ \Carbon\Carbon::parse($booking->showtime->start_time)->format('l, F d, Y') }}
                 </div>
-                <div class="detail-value" style="color: #667eea; margin-top: 0.25rem;">
+                <div class="detail-value" ">
                     {{ \Carbon\Carbon::parse($booking->showtime->start_time)->format('h:i A') }}
                 </div>
             </div>
         </div>
-        
+
         <div class="detail-row">
             <div class="detail-icon">💺</div>
             <div class="detail-content">
@@ -336,7 +304,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="total-section">
             <div class="total-label">Total Amount Paid</div>
             <div class="total-amount">${{ number_format($booking->total_price, 2) }}</div>

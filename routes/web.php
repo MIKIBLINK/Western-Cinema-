@@ -30,26 +30,27 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-require __DIR__.'/admin-auth.php';
+require __DIR__ . '/admin-auth.php';
 
 Route::prefix('admin')
     ->name('admin.')
     ->middleware('auth:admin')
-    ->group(function () {
-        Route::resource('movies', MovieController::class);
-        Route::resource('showtimes', ShowtimeController::class);
-        Route::resource('seats', SeatController::class);
-        Route::resource('halls', HallController::class);
-        Route::resource('bookings', BookingController::class);
-        Route::resource('payments', PaymentController::class);
-        Route::resource('users', UserController::class);
-    }    
-);
+    ->group(
+        function () {
+            Route::resource('movies', MovieController::class);
+            Route::resource('showtimes', ShowtimeController::class);
+            Route::resource('seats', SeatController::class);
+            Route::resource('halls', HallController::class);
+            Route::resource('bookings', BookingController::class);
+            Route::resource('payments', PaymentController::class);
+            Route::resource('users', UserController::class);
+        }
+    );
 
 Route::prefix('user')->middleware('auth')->group(function () {
-    
+
 });
 
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {

@@ -19,39 +19,39 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-start">
                                             <div class="p-2">
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked id="filter-all">
                                                     <label class="form-check-label" for="filter-all">
                                                         All
                                                     </label>
                                                 </div>
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked id="filter-one">
                                                     <label class="form-check-label" for="filter-one">
                                                         New
                                                     </label>
                                                 </div>
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked id="filter-two">
                                                     <label class="form-check-label" for="filter-two">
                                                         VIP
                                                     </label>
                                                 </div>
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked
                                                         id="filter-three">
                                                     <label class="form-check-label" for="filter-three">
                                                         Repeat
                                                     </label>
                                                 </div>
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked
                                                         id="filter-four">
                                                     <label class="form-check-label" for="filter-four">
                                                         Referral
                                                     </label>
                                                 </div>
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked
                                                         id="filter-five">
                                                     <label class="form-check-label" for="filter-five">
@@ -78,7 +78,7 @@
                             </div><!--end col-->
                         </div><!--end row-->
                     </div><!--end card-header-->
-                    <div class="card-body pt-0">
+                    <div class="pt-0 card-body">
 
                         <div class="table-responsive">
                             <table class="table mb-0 checkbox-all" id="datatable_1">
@@ -107,7 +107,7 @@
                                                         @method('DELETE')
                                                         <button type="submit" onclick="comfirm"><i class="las la-trash-alt text-secondary fs-18"></i></button>
                                                     </form>
-                                                    
+
                                                 </td>
                                             </tr>
                                         @endforeach

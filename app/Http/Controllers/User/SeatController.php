@@ -16,19 +16,19 @@ class SeatController extends Controller
     {
         // Get all seats for the hall
         $seats = Seat::where('hall_id', $showtime->hall_id)
-        ->orderBy('seat_row')
-        ->orderBy('seat_number')
-        ->get();
+            ->orderBy('seat_row')
+            ->orderBy('seat_number')
+            ->get();
 
-    $bookedSeatIds = $showtime->bookings()
-        ->with('seats:id')
-        ->get()
-        ->pluck('seats.*.id')
-        ->flatten()
-        ->unique()
-        ->toArray();
+        $bookedSeatIds = $showtime->bookings()
+            ->with('seats:id')
+            ->get()
+            ->pluck('seats.*.id')
+            ->flatten()
+            ->unique()
+            ->toArray();
 
-    return view('user.seats.index', compact('showtime', 'seats', 'bookedSeatIds'));
+        return view('user.seats.index', compact('showtime', 'seats', 'bookedSeatIds'));
     }
 
     /**
