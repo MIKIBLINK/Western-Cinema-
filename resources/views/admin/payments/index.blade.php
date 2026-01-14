@@ -7,88 +7,19 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">List of Payment</h4>
-                            </div><!--end col-->
-                            <div class="col-auto">
-                                <form class="row g-2">
-                                    <div class="col-auto">
-                                        <a class="btn bg-primary-subtle text-primary dropdown-toggle d-flex align-items-center arrow-none"
-                                            data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
-                                            aria-expanded="false" data-bs-auto-close="outside">
-                                            <i class="iconoir-filter-alt me-1"></i> Filter
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-start">
-                                            <div class="p-2">
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked id="filter-all">
-                                                    <label class="form-check-label" for="filter-all">
-                                                        All
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked id="filter-one">
-                                                    <label class="form-check-label" for="filter-one">
-                                                        New
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked id="filter-two">
-                                                    <label class="form-check-label" for="filter-two">
-                                                        VIP
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked
-                                                        id="filter-three">
-                                                    <label class="form-check-label" for="filter-three">
-                                                        Repeat
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked
-                                                        id="filter-four">
-                                                    <label class="form-check-label" for="filter-four">
-                                                        Referral
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked
-                                                        id="filter-five">
-                                                    <label class="form-check-label" for="filter-five">
-                                                        Inactive
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" checked id="filter-six">
-                                                    <label class="form-check-label" for="filter-six">
-                                                        Loyal
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!--end col-->
-
-                                    {{-- <div class="col-auto">
-                                        <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary">
-                                            <i class="fa-solid fa-plus me-1"></i>
-                                            Add Booking
-                                        </a>
-                                    </div><!--end col--> --}}
-                                </form>
-                            </div><!--end col-->
-                        </div><!--end row-->
-                    </div><!--end card-header-->
-                    <div class="card-body pt-0">
-
+                                <h4 class="card-title">List of Payments</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-0 card-body">
                         <div class="table-responsive">
-                            <table class="table mb-0 checkbox-all" id="datatable_1">
+                            <table class="table mb-0" id="datatable_1">
                                 <thead class="table-light">
                                     <tr>
                                         <th>No</th>
                                         <th>User</th>
                                         <th>Movie</th>
                                         <th>Total</th>
-                                        <th>Method</th>
                                         <th>Status</th>
                                         <th>Transaction Ref</th>
                                         <th class="text-end">Action</th>
@@ -98,32 +29,47 @@
                                     @forelse ($rows as $index => $payment)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $payment->booking->user->name }}</td>
-                                            <td>{{ $payment->booking->showtime->movie->title }}</td>
-                                            <td>${{ number_format($payment->amount, 2) }}</td>
-                                            <td>{{ ucfirst($payment->method) }}</td>
+
+                                            {{-- Safe User Access --}}
+                                            <td>{{ $payment->booking?->user?->name ?? 'Deleted User' }}</td>
+
+                                            {{-- Safe Movie Access --}}
                                             <td>
-                                                <span class="badge 
-                                                    {{ $payment->status === 'paid' ? 'bg-success' : 
-                                                    ($payment->status === 'pending' ? 'bg-warning' : 'bg-danger') }}">
-                                                    {{ ucfirst($payment->status) }}
+                                                <span class="fw-medium text-primary">
+                                                    {{ $payment->booking?->showtime?->movie?->title ?? 'N/A (Movie Deleted)' }}
                                                 </span>
                                             </td>
-                                            <td>{{ $payment->transaction_ref }}</td>
-                                            <td class="text-end d-flex gap-2 justify-content-end">
-                                                <a href="{{ route('admin.payments.edit', $payment->id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
 
-                                                <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST"
-                                                    onsubmit="return confirm('Are you sure?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                                </form>
+                                            <td>${{ number_format($payment->amount, 2) }}</td>
+                                            <td>
+                                                <span class="badge
+                                                    {{ ($payment->status === 'paid' || $payment->status === 'completed') ? 'bg-success' :
+                                                    ($payment->status === 'pending' ? 'bg-warning' : 'bg-danger') }}">
+                                                    {{ ucfirst($payment->status ?? 'Unknown') }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $payment->transaction_ref ?? 'N/A' }}</td>
+
+                                            <td class="text-end">
+                                                <div class="gap-2 d-flex justify-content-end">
+                                                    <a href="{{ route('admin.payments.edit', $payment->id) }}" class="btn btn-sm btn-outline-secondary">
+                                                        <i class="las la-pen fs-16"></i> Edit
+                                                    </a>
+
+                                                    <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST"
+                                                        onsubmit="return confirm('Are you sure?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="las la-trash-alt fs-16"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center">No payments found.</td>
+                                            <td colspan="7" class="py-4 text-center">No payment records found.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -131,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-    </div><!-- container -->
+            </div>
+        </div>
+    </div>
 @endsection

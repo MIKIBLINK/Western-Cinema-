@@ -7,9 +7,8 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">List of Movie</h4>
-                            </div><!--end col-->
-                            <div class="col-auto">
+                                <h4 class="card-title">List of Showtimes</h4>
+                            </div><div class="col-auto">
                                 <form class="row g-2">
                                     <div class="col-auto">
                                         <a class="btn bg-primary-subtle text-primary dropdown-toggle d-flex align-items-center arrow-none"
@@ -19,67 +18,23 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-start">
                                             <div class="p-2">
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked id="filter-all">
-                                                    <label class="form-check-label" for="filter-all">
-                                                        All
-                                                    </label>
+                                                    <label class="form-check-label" for="filter-all">All</label>
                                                 </div>
-                                                <div class="form-check mb-2">
+                                                <div class="mb-2 form-check">
                                                     <input type="checkbox" class="form-check-input" checked id="filter-one">
-                                                    <label class="form-check-label" for="filter-one">
-                                                        New
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked id="filter-two">
-                                                    <label class="form-check-label" for="filter-two">
-                                                        VIP
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked
-                                                        id="filter-three">
-                                                    <label class="form-check-label" for="filter-three">
-                                                        Repeat
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked
-                                                        id="filter-four">
-                                                    <label class="form-check-label" for="filter-four">
-                                                        Referral
-                                                    </label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input type="checkbox" class="form-check-input" checked
-                                                        id="filter-five">
-                                                    <label class="form-check-label" for="filter-five">
-                                                        Inactive
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" checked id="filter-six">
-                                                    <label class="form-check-label" for="filter-six">
-                                                        Loyal
-                                                    </label>
+                                                    <label class="form-check-label" for="filter-one">New</label>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div><!--end col-->
-
-                                    <div class="col-auto">
+                                    </div><div class="col-auto">
                                         <a href="{{ route('admin.showtimes.create') }}" class="btn btn-primary">
                                             <i class="fa-solid fa-plus me-1"></i>
                                             Add Showtimes
                                         </a>
-                                    </div><!--end col-->
-                                </form>
-                            </div><!--end col-->
-                        </div><!--end row-->
-                    </div><!--end card-header-->
-                    <div class="card-body pt-0">
-
+                                    </div></form>
+                            </div></div></div><div class="pt-0 card-body">
                         <div class="table-responsive">
                             <table class="table mb-0 checkbox-all" id="datatable_1">
                                 <thead class="table-light">
@@ -93,36 +48,44 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($rows)
+                                    @if ($rows && $rows->count() > 0)
                                         @php($i = 1)
                                         @foreach ($rows as $row)
                                             <tr>
-                                                <td>{{$i++}}</td>
-                                            
-                                                <td>{{$row ->movie->title ?? 'N/a'}}</td>
-                                                <td>{{$row->hall->name}}</td>
-                                                <td>{{$row->start_time}}</td>
-                                                <td>{{$row->price}}</td>
+                                                <td>{{ $i++ }}</td>
+
+                                                {{-- Added null-safe operator to prevent crash if movie is deleted --}}
+                                                <td>{{ $row->movie?->title ?? 'Movie Deleted' }}</td>
+
+                                                {{-- Added null-safe operator to prevent crash if hall is deleted --}}
+                                                <td>{{ $row->hall?->name ?? 'Hall Deleted' }}</td>
+
+                                                <td>{{ $row->start_time }}</td>
+                                                <td>{{ number_format($row->price, 2) }}</td>
+
                                                 <td class="text-end">
-                                                    <a href="{{route('admin.showtimes.edit',$row->id)}}"><i class="las la-pen text-secondary fs-18"></i></a>
-                                                        <form action="{{route('admin.showtimes.destroy', $row->id)}}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" onclick="comfirm"><i class="las la-trash-alt text-secondary fs-18"></i></button>
-                                                    </form>
-                                                    
+                                                    <div class="gap-2 d-flex justify-content-end">
+                                                        <a href="{{ route('admin.showtimes.edit', $row->id) }}">
+                                                            <i class="las la-pen text-secondary fs-18"></i>
+                                                        </a>
+
+                                                        <form action="{{ route('admin.showtimes.destroy', $row->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this showtime?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" style="background: none; border: none; padding: 0;">
+                                                                <i class="las la-trash-alt text-secondary fs-18"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="6" class="text-center">No showtimes found.</td>
+                                        </tr>
                                     @endif
-
-
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-    </div><!-- container -->
-@endsection
+                    </div></div></div> </div> </div>@endsection

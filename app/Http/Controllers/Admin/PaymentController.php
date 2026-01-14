@@ -2,57 +2,55 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Booking;
+use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class PaymentController extends Controller
 {
     public function index()
-        {
-            $rows = Payment::with([
-                'booking.user',
-                'booking.showtime.movie'
-            ])->latest()->get();
-
+    {
+        // Eager load relationships to prevent the "property on null" crash
+        $rows = Payment::with(['booking.user', 'booking.showtime.movie'])->latest()->get();
         return view('admin.payments.index', compact('rows'));
     }
 
-
-    public function markPaid(Booking $booking)
+    /**
+     * Show the form for editing the specified payment.
+     * This fixes the "Call to undefined method" error.
+     */
+    public function edit($id)
     {
-        if ($booking->payment) {
-            return back()->withErrors('Payment already exists.');
-        }
-
-        $booking->update(['status' => 'paid']);
-
-        Payment::create([
-            'booking_id' => $booking->id,
-            'amount' => $booking->total_price,
-            'method' => 'admin',
-            'status' => 'paid',
-            'transaction_ref' => 'ADMIN-' . strtoupper(uniqid()),
-        ]);
-
-        return back()->with('success', 'Marked as paid.');
+        $payment = Payment::findOrFail($id);
+        return view('admin.payments.edit', compact('payment'));
     }
 
-    public function update(Request $request, Payment $payment)
+    /**
+     * Update the payment status or details.
+     */
+    public function update(Request $request, $id)
     {
+        $payment = Payment::findOrFail($id);
+
         $request->validate([
-            'status' => 'required|in:pending,paid,failed',
+            'status' => 'required|in:pending,paid,failed,completed',
         ]);
 
-        $payment->update([
-            'status' => $request->status,
-        ]);
+        $payment->update($request->all());
 
-        $payment->booking->update([
-            'status' => $request->status === 'paid' ? 'paid' : 'pending',
-        ]);
+        return redirect()->route('admin.payments.index')->with('success', 'Payment updated successfully');
+    }
 
-        return back()->with('success', 'Payment updated.');
+    public function show($id)
+    {
+        $payment = Payment::with(['booking.user', 'booking.showtime.movie'])->findOrFail($id);
+        return view('admin.payments.show', compact('payment'));
+    }
+
+    public function destroy($id)
+    {
+        $payment = Payment::findOrFail($id);
+        $payment->delete();
+        return redirect()->route('admin.payments.index')->with('success', 'Payment deleted successfully');
     }
 }
